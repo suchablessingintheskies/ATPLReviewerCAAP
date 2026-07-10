@@ -5,10 +5,20 @@ import random
 # MASTER QUESTION BANK
 # ==========================================
 MASTER_QUESTION_BANK = {
-    "Principles of Flight": [],
-    "Flight Performance & Planning": [],
-    "Aircraft General Knowledge": [],
-    "Air Law": [],
+    "Wagyu?": [
+        {
+            "question": "Does David love Stephanie?",
+            "choices": ["A little bit...", "ABSOLUTELY YES!", "Not so much...", "So-so..."],
+            "correct": "ABSOLUTELY YES!"
+        },
+
+        {
+            "question": "Where are David and Stephanie going to in February?",
+            "choices": [],
+            "correct": "Thailand!"
+        },
+        
+    ],
     "Operational Procedures": [
         # --- Multiple Choice Section ---
         {

@@ -5,20 +5,7 @@ import random
 # MASTER QUESTION BANK
 # ==========================================
 MASTER_QUESTION_BANK = {
-    "Wagyu?": [
-        {
-            "question": "Does David love Stephanie?",
-            "choices": ["A little bit...", "ABSOLUTELY YES!", "Not so much...", "So-so..."],
-            "correct": "ABSOLUTELY YES!"
-        },
-
-        {
-            "question": "Where are David and Stephanie going to in February?",
-            "choices": [],
-            "correct": "Thailand!"
-        },
-        
-    ],
+  
     "Operational Procedures": [
         # --- Multiple Choice Section ---
         {
@@ -1269,7 +1256,20 @@ MASTER_QUESTION_BANK = {
             "correct": "indication will drop to zero"
         }
     ],
-    
+      "Wagyu?": [
+        {
+            "question": "Does David love Stephanie?",
+            "choices": ["A little bit...", "ABSOLUTELY YES!", "Not so much...", "So-so..."],
+            "correct": "ABSOLUTELY YES!"
+        },
+
+        {
+            "question": "Where are David and Stephanie going to in February?",
+            "choices": [],
+            "correct": "Thailand!"
+        },
+        
+    ],
     "Air Law": [
         # --- Multiple Choice Section ---
         {

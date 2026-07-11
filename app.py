@@ -3879,8 +3879,10 @@ MASTER_QUESTION_BANK = {
 # ==========================================
 # INITIALIZATION
 # ==========================================
+
 if "initialized" not in st.session_state:
     st.session_state.current_pool = []
+    st.session_state.original_set = []  # <--- ADD THIS LINE
     st.session_state.q_idx = 0
     st.session_state.correct_count = 0
     st.session_state.incorrect_pool = []
@@ -3890,7 +3892,6 @@ if "initialized" not in st.session_state:
     st.session_state.selected_option = None
     st.session_state.shuffled_choices = []
     st.session_state.initialized = True
-
 st.set_page_config(page_title="ATPL Multi-Subject Study Engine", page_icon="✈️", layout="centered")
 st.title("📚 ATPL Multi-Subject Study Core")
 st.sidebar.header("🛠️ Quiz Configuration")
@@ -3921,6 +3922,7 @@ if st.sidebar.button("Generate Session / Reset Exam") or not st.session_state.cu
             
     random.shuffle(compiled_pool)
     st.session_state.current_pool = compiled_pool[:max_questions]
+    st.session_state.original_set = st.session_state.current_pool.copy()  # <--- ADD THIS LINE
     st.session_state.q_idx = 0
     st.session_state.correct_count = 0
     st.session_state.incorrect_pool = []
@@ -4022,23 +4024,43 @@ else:
     st.success("🎉 Exam Configuration Block Finalized!")
     st.metric(label="Final Exam Score", value=f"{st.session_state.correct_count} / {total_in_round}", delta=f"{score_percentage:.1f}%")
     
-    if st.session_state.incorrect_pool:
-        st.warning(f"Review Core: {len(st.session_state.incorrect_pool)} missed item sequences require correction.")
-        if st.button("Initialize Spaced-Repetition Review Pass"):
-            st.session_state.current_pool = st.session_state.incorrect_pool.copy()
-            random.shuffle(st.session_state.current_pool)
-            st.session_state.incorrect_pool = []
+    # Create side-by-side action buttons
+    end_col1, end_col2 = st.columns(2)
+    
+    with end_col1:
+        if st.button("🔄 Repeat Current Set", use_container_width=True):
+            st.session_state.current_pool = st.session_state.original_set.copy()
             st.session_state.q_idx = 0
             st.session_state.correct_count = 0
-            st.session_state.round_num += 1
+            st.session_state.incorrect_pool = []
+            st.session_state.round_num = 1
             st.session_state.answered = False
             st.session_state.revealed = False
             st.session_state.selected_option = None
             st.session_state.shuffled_choices = []
             st.rerun()
+            
+    with end_col2:
+        if st.session_state.incorrect_pool:
+            if st.button("🔁 Spaced-Repetition Pass", use_container_width=True):
+                st.session_state.current_pool = st.session_state.incorrect_pool.copy()
+                random.shuffle(st.session_state.current_pool)
+                st.session_state.incorrect_pool = []
+                st.session_state.q_idx = 0
+                st.session_state.correct_count = 0
+                st.session_state.round_num += 1
+                st.session_state.answered = False
+                st.session_state.revealed = False
+                st.session_state.selected_option = None
+                st.session_state.shuffled_choices = []
+                st.rerun()
+        else:
+            if st.button("🧹 Clear & Reset Engine", use_container_width=True):
+                st.session_state.clear()
+                st.rerun()
+                
+    if st.session_state.incorrect_pool:
+        st.warning(f"Review Core: {len(st.session_state.incorrect_pool)} missed item sequences require correction.")
     else:
         st.balloons()
         st.write("### 💯 Absolute Subject Mastery Confirmed!")
-        if st.button("Restart Entire Quiz Bank"):
-            st.session_state.clear()
-            st.rerun()
